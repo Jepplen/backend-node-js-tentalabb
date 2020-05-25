@@ -37,7 +37,6 @@ export default function AddForm(props){
         "Content-Type": "application/json"
       }})
       .then(function() {
-        console.log("POSTED");
         props.getAll();
         props.updateShouldAdd(false);
     })

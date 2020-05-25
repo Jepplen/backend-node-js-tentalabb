@@ -18,6 +18,7 @@ export default function App() {
   const [shouldDeleteAllPre, updateShouldDeleteAllPre] = useState(false);
   const [shouldDeleteAll, updateShouldDeleteAll] = useState(false);
   const [localItem, updateLocalItem] = useState({});
+  const lists = ["unassigned", "in_progress", "done"];
 
   useEffect(() => {
     getAll();
@@ -79,78 +80,46 @@ export default function App() {
     <div className="App">
     <h1 style={{ textAlign: "center", marginTop: "50px", marginBottom: "50px"}}>Salmon List</h1>
       <div className="listWrapper">
-        <div className="list unassigned">
-          <div className="list__title">
-            <p>Unassigned</p>
+      {lists.map((list, index) => {
+        let formatTitle = list.replace(/\w\S*/g,
+          function(txt){
+            return txt
+              .charAt(0)
+              .toUpperCase() + txt.substr(1)
+              .toLowerCase();})
+              .split("_")
+              .join(" ");
+        return (
+          <div className="list" key={index}>
+            <div className="list__title">
+              <p>{formatTitle}</p>
+            </div>
+            <div className="list__itemWrapper">
+              {items.filter(item => item.current_list === list).map((item) => {
+                return (
+                  <Item
+                    key={item._id}
+                    id={item._id}
+                    title={item.title}
+                    description={item.description}
+                    dateCreated={item.date_created}
+                    currentList={item.current_list}
+                    itemDetails={setDetails}
+                    updateShouldEdit={updateShouldEdit}
+                    updateLocalItem={updateLocalItem}
+                    getAll={getAll}
+                  />
+                );
+              })}
+            </div>
+            {list === "unassigned" &&
+              <button className="list__addButton" onClick={() => updateShouldAdd(true)}>
+                <div className="list__addButton__span">+</div>
+              </button>
+            }
           </div>
-          <div className="list__itemWrapper">
-            {items.filter(item => item.current_list === "unassigned").map((item) => {
-              return (
-                <Item
-                  key={item._id}
-                  id={item._id}
-                  title={item.title}
-                  description={item.description}
-                  dateCreated={item.date_created}
-                  currentList={item.current_list}
-                  itemDetails={setDetails}
-                  updateShouldEdit={updateShouldEdit}
-                  updateLocalItem={updateLocalItem}
-                  getAll={getAll}
-                />
-              );
-            })}
-          </div>
-          <button className="list__addButton" onClick={() => updateShouldAdd(true)}>
-            <div className="list__addButton__span">+</div>
-          </button>
-        </div>
-        <div className="list in_progress">
-          <div className="list__title">
-            <p>In Progress</p>
-          </div>
-          <div className="list__itemWrapper">
-            {items.filter(item => item.current_list === "in_progress").map((item) => {
-              return (
-                <Item
-                  key={item._id}
-                  id={item._id}
-                  title={item.title}
-                  description={item.description}
-                  dateCreated={item.date_created}
-                  currentList={item.current_list}
-                  itemDetails={setDetails}
-                  updateShouldEdit={updateShouldEdit}
-                  updateLocalItem={updateLocalItem}
-                  getAll={getAll}
-                />
-              );
-            })}
-          </div>
-        </div>
-        <div className="list done">
-          <div className="list__title">
-            <p>Done</p>
-          </div>
-          <div className="list__itemWrapper">
-            {items.filter(item => item.current_list === "done").map((item) => {
-              return (
-                <Item
-                  key={item._id}
-                  id={item._id}
-                  title={item.title}
-                  description={item.description}
-                  dateCreated={item.date_created}
-                  currentList={item.current_list}
-                  itemDetails={setDetails}
-                  updateShouldEdit={updateShouldEdit}
-                  updateLocalItem={updateLocalItem}
-                  getAll={getAll}
-                />
-              );
-            })}
-          </div>
-        </div>
+        );
+      })}
       </div>
       {!admin && <button className="buttonMain buttonDel" onClick={deleteAll}>Delete all items</button>}
       {admin && <button className="buttonMain buttonDelConf" onClick={() => {updateShouldDeleteAllPre(true)}}>CONFIRM DELETION</button>}
