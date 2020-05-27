@@ -7,7 +7,7 @@ import EditForm from "./EditForm";
 import Hickup from "./Hickup";
 import Progress from "./Progress";
 import './App.css';
-const URL = "/api/api";
+const URL = "/api";
 
 export default function App() {
   const [items, updateItems] = useState([]);
@@ -17,6 +17,7 @@ export default function App() {
   const [shouldEdit, updateShouldEdit] = useState(false);
   const [shouldDeleteAllPre, updateShouldDeleteAllPre] = useState(false);
   const [shouldDeleteAll, updateShouldDeleteAll] = useState(false);
+  const [hasStarted, updateHasStarted] = useState(false);
   const [localItem, updateLocalItem] = useState({});
   const lists = ["unassigned", "in_progress", "done"];
 
@@ -76,6 +77,11 @@ export default function App() {
     updateDetails({title: title, description: description});
   }
 
+  function onClick(){
+    updateShouldDeleteAllPre(true);
+    updateHasStarted(true);
+  }
+
   return (
     <div className="App">
     <h1 style={{ textAlign: "center", marginTop: "50px", marginBottom: "50px"}}>Salmon List</h1>
@@ -122,13 +128,13 @@ export default function App() {
       })}
       </div>
       {!admin && <button className="buttonMain buttonDel" onClick={deleteAll}>Delete all items</button>}
-      {admin && <button className="buttonMain buttonDelConf" onClick={() => {updateShouldDeleteAllPre(true)}}>CONFIRM DELETION</button>}
-      {admin && <button className="buttonMain buttonDelCancel" onClick={() => updateAdmin("")}>CANCEL</button>}
+      {admin && !hasStarted ? <button className="buttonMain buttonDelConf" onClick={onClick}>CONFIRM DELETION</button> : null}
+      {admin && !hasStarted ? <button className="buttonMain buttonDelCancel" onClick={() => updateAdmin("")}>CANCEL</button> : null}
       {details && <Details closeDetails={updateDetails} moreDetails={details} />}
       {shouldAdd && <AddForm getAll={getAll} updateShouldAdd={updateShouldAdd} />}
       {shouldEdit && <EditForm getAll={getAll} updateShouldEdit={updateShouldEdit} localItem={localItem}/>}
       {shouldDeleteAllPre && <Hickup startProgressBar={updateShouldDeleteAll} closePre={updateShouldDeleteAllPre} />}
-      {shouldDeleteAll && <Progress deleteAllRun={deleteAllRun} close={updateShouldDeleteAll}  />}
+      {shouldDeleteAll && <Progress deleteAllRun={deleteAllRun} close={updateShouldDeleteAll} stop={updateHasStarted} />}
     </div>
   );
 }

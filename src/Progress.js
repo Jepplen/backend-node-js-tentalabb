@@ -56,6 +56,11 @@ export default function Progress(props){
     cancelButton.current.style.transform = pos;
   }
 
+  function onClick(){
+    props.close(!true);
+    props.stop(false);
+  }
+
   return(
     <div className="mask">
       <div className="progress">
@@ -67,7 +72,7 @@ export default function Progress(props){
           <div className="progressbar_bar" ref={progressBar}></div>
         </div>
         {!done && <button className="popup__button" ref={cancelButton} onMouseEnter={moveButton}>Cancel</button>}
-        {done && <button className="popup__button" onClick={() => props.close(!true)}>Ok</button>}
+        {done && <button className="popup__button" onClick={onClick}>Ok</button>}
       </div>
     </div>
   );

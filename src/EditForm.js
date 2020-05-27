@@ -1,7 +1,7 @@
 import React, {useReducer} from "react";
 import axios from "axios";
 import "./App.css";
-const URL = "/api/api";
+const URL = "/api";
 
 export default function EditForm(props){
   const [userInput, updateUserInput] = useReducer(

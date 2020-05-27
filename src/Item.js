@@ -5,7 +5,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import "./App.css";
-const URL = "/api/api";
+const URL = "/api";
 
 
 export default function Item(props) {

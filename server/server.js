@@ -269,7 +269,7 @@ api.delete("/delete/all/:auth", (req, res) => {
 
 
 // ROUTER
-app.use("/api/api", api);
+app.use("/api", api);
 
 
 // SERVER PORT LISTENER
